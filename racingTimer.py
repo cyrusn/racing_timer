@@ -1,47 +1,70 @@
 from gpiozero import LightSensor, Button
 from time import time
-from signal import pause
 from timer import Timer
 
+CHARGE_TIME_LIMIT = 0.005
+THRESHOLD = 0.05
+QUEUE_LEN = 1
+
+class RacingTimer:
+    def __init__(self, start_pin, finish_pin):
+        self.start_sensor = LightSensor(start_pin, threshold=THRESHOLD, charge_time_limit=CHARGE_TIME_LIMIT, queue_len=QUEUE_LEN)
+        self.finish_sensor = LightSensor(finish_pin, threshold=THRESHOLD, charge_time_limit=CHARGE_TIME_LIMIT, queue_len=QUEUE_LEN)
+    
+    
+    @property
+    def start_ready(self):
+        return self.start_sensor.light_detected
+    
+    @property
+    def finish_ready(self):
+        return self.finish_sensor.light_detected
+
+    @property
+    def ready(self):
+        return self.start_ready and self.finish_ready
+    
+    @property
+    def when_start(self):
+        return self.start_sensor.when_dark
+    
+    @when_start.setter
+    def when_start(self, value):
+        if not self.ready:
+            self.finish_sensor.when_dark = None
+        else:
+            self.start_sensor.when_dark = value
+        
+    @property
+    def when_finish(self):
+        return self.finish_sensor.when_dark
+    
+    @when_finish.setter
+    def when_finish(self, value):
+        if not self.ready:
+            self.finish_sensor.when_dark = None
+        else:
+            self.finish_sensor.when_dark = value
+            
+    def status_message(self):
+        print('Start: {}\nFinish: {}'.format(self.start_ready, self.finish_ready))
 
 if __name__ == '__main__':
-    CHARGE_TIME_LIMIT = 0.005
-    THRESHOLD = 0.05
-    QUEUE_LEN = 1
+    from signal import pause
+    start_pin = 20
+    finish_pin = 21
     
-    START_L_PIN = 20
-    FINISH_L_PIN = 21
-
-    START_R_PIN = 23
-    FINISH_R_PIN = 24
-
-
-    start_L_sensor = LightSensor(START_L_PIN, threshold=THRESHOLD, charge_time_limit=CHARGE_TIME_LIMIT, queue_len=QUEUE_LEN)
-    finish_L_sensor = LightSensor(FINISH_L_PIN, threshold=THRESHOLD, charge_time_limit=CHARGE_TIME_LIMIT, queue_len=QUEUE_LEN)
-
-    start_R_sensor = LightSensor(START_R_PIN, threshold=THRESHOLD, charge_time_limit=CHARGE_TIME_LIMIT, queue_len=QUEUE_LEN)
-    finish_R_sensor = LightSensor(FINISH_R_PIN, threshold=THRESHOLD, charge_time_limit=CHARGE_TIME_LIMIT, queue_len=QUEUE_LEN)
-
-    print('Left: Start: {}, Finish: {}'.format(start_L_sensor.light_detected, finish_L_sensor.light_detected))
-    print('Right: Start: {}, Finish: {}\n'.format(start_R_sensor.light_detected, finish_R_sensor.light_detected))
+    def startMessage():
+        print('start')
+        
+    def finishMessage():
+        print('finish')
     
-    while (
-        start_L_sensor.light_detected and 
-        finish_L_sensor.light_detected and
-        start_R_sensor.light_detected and 
-        finish_R_sensor.light_detected
-    ):
-        timer_L = Timer()
-        timer_R = Timer()
-        print('Programme started')
-        
-        start_L_sensor.when_dark = timer_L.start
-        finish_L_sensor.when_dark = timer_L.finish
-        
-        start_R_sensor.when_dark = timer_R.start
-        finish_R_sensor.when_dark = timer_R.finish
-        
-        pause()
-   
-    print('Lasers are not detected')
-   
+    racingTimer = RacingTimer(start_pin, finish_pin)
+    
+    racingTimer.status_message()
+    racingTimer.when_start = startMessage
+    racingTimer.when_finish = finishMessage
+    
+    pause()
+    
