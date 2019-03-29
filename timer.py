@@ -1,28 +1,24 @@
+from time import time
+
+
 class Timer:
     def __init__(self):
-        self.init()
-        
-    def init(self):
-        self.start_trigger_count = 0
-        self.finish_trigger_count = 0
+        self.is_started = False
+        self.is_finished = False
         self.start_time = 0
         self.end_time = 0
-        
+
     def start(self):
-        if self.start_trigger_count == 0:
-            print('Start')
+        if not self.is_started:
             self.start_time = time()
-            self.start_trigger_count += 1
-        
+            self.is_started = True
+
     def finish(self):
-        if self.finish_trigger_count == 0:
-            print('Finish')
+        if not self.is_finished:
             self.end_time = time()
-            self.finish_trigger_count += 1
-            print(self.time_difference)
-            quit()
-        
+            self.is_finished = True
+
     @property
     def time_difference(self):
         return self.end_time - self.start_time
-    
+
