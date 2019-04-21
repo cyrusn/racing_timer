@@ -5,10 +5,9 @@ from school import School
 from format_string import format_string
 
 
-url = "https://docs.google.com/forms/d/e/1FAIpQLSewkygNwfc-liPX3jZFf_5gZvRGBimdhEThRk5Le7-PHcFHOg/formResponse"  # Set destination URL here
-
-
 class Form:
+    URL = "https://docs.google.com/forms/d/e/1FAIpQLSewkygNwfc-liPX3jZFf_5gZvRGBimdhEThRk5Le7-PHcFHOg/formResponse"  # Set destination URL here
+
     def __init__(self):
         self.response = None
 
@@ -24,7 +23,7 @@ class Form:
 
         data = urlencode(form_data).encode("ascii")
         try:
-            with urlopen(url, data) as f:
+            with urlopen(self.URL, data) as f:
                 if f.getcode() == 200:
                     print(format_string("Submitted", track, school_name, team, time))
                 else:

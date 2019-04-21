@@ -41,19 +41,18 @@ def checkSensorStatus(tracks):
 
 def initTimers(tracks):
     for track in tracks:
-        track_name = track["name"]
         start_pin = track["start_pin"]
         finish_pin = track["finish_pin"]
-        track["timer"] = TrackTimer(start_pin, finish_pin, track_name)
+        track["timer"] = TrackTimer(start_pin, finish_pin, track["name"])
 
 
 def listen_events(tracks):
     while ready(tracks):
-        print("Programme ready.\n")
+        print("Programme is ready.\n")
 
         for timer in [track["timer"] for track in tracks]:
-            timer.when_start = timer.start
-            timer.when_finish = timer.finish
+            timer.when_start = timer.on_start
+            timer.when_finish = timer.on_finish
 
         pause()
 
