@@ -9,7 +9,7 @@ def format_string(typ, track, school_name, team, duration=None):
 
 
 if __name__ == "__main__":
-    from school_name import SchoolName
+    from school import School
 
     tests = [
         {"key": "Start", "track": "A", "school_code": "B", "team": 2, "duration": None},
@@ -24,7 +24,7 @@ if __name__ == "__main__":
     ]
 
     for test in tests:
-        school_name = SchoolName.get(test["school_code"])
+        school_name = School.getName(test["school_code"])
         print(
             format_string(
                 test["key"], test["track"], school_name, test["team"], test["duration"]

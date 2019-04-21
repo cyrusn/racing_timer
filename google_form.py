@@ -1,7 +1,7 @@
 from urllib.parse import urlencode
 from urllib.error import URLError, HTTPError
 from urllib.request import urlopen
-from school_name import SchoolName
+from school import School
 from format_string import format_string
 
 
@@ -13,7 +13,7 @@ class Form:
         self.response = None
 
     def submit(self, school_code, team, track, time):
-        school_name = SchoolName[school_code.upper()].value
+        school_name = School.getName(school_code)
 
         form_data = {
             "entry.1154166350": school_name,
@@ -35,7 +35,7 @@ class Form:
 
 
 if __name__ == "__main__":
-    SchoolName.printSchoolList()
+    School.printList()
 
     form = Form()
     school_code = input("Select School Code: ")

@@ -2,7 +2,7 @@ from signal import pause
 from track_timer import TrackTimer
 from google_form import Form
 from functools import reduce
-from school_name import SchoolName
+from school import School
 from sys import stderr
 
 
@@ -13,7 +13,7 @@ def ready(tracks):
 
 def setTimersInfo(tracks):
     for timer in [track["timer"] for track in tracks]:
-        SchoolName.printSchoolList()
+        School.printList()
 
         school_code = ""
         while school_code.upper() not in ["A", "B", "C", "D"]:

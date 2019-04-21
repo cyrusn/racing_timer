@@ -1,7 +1,7 @@
 from track_sensor import TrackSensor
 from timer import Timer
 from google_form import Form
-from school_name import SchoolName
+from school import School
 from format_string import format_string
 
 
@@ -19,7 +19,7 @@ class TrackTimer:
 
     @property
     def school_name(self):
-        return SchoolName.get(self.school_code)
+        return School.getName(self.school_code)
 
     @property
     def when_start(self):
@@ -78,7 +78,7 @@ if __name__ == "__main__":
     START_PIN = 20
     FINISH_PIN = 21
 
-    SchoolName.printSchoolList()
+    School.printSchoolList()
     track = "A"
     track_timer = TrackTimer(START_PIN, FINISH_PIN, track)
 
