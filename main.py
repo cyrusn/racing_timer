@@ -11,30 +11,41 @@ def ready(tracks):
     return reduce((lambda x, y: x.ready and y.ready), timers)
 
 
+def input_school_code(track):
+    code = ""
+    while code.upper() not in ["A", "B", "C", "D"]:
+        code = input("School Code of Track {}: ".format(track))
+    return code
+
+
+def input_team():
+    team = 0
+    while int(team) not in [1, 2, 3]:
+        team = input("Team (1-3): ")
+    return team
+
+
 def setTimersInfo(tracks):
     for timer in [track["timer"] for track in tracks]:
         School.printList()
 
-        school_code = ""
-        while school_code.upper() not in ["A", "B", "C", "D"]:
-            school_code = input("School Code of Track {}: ".format(timer.track))
-        timer.school_code = school_code
+        timer.school_code = input_school_code(timer.track)
 
-        team = 0
-        while int(team) not in [1, 2, 3]:
-            team = input("Team (1-3): ")
-        timer.team = team
+        timer.team = input_team()
+
         print("{:=<30}".format(""))
 
 
 def checkSensorStatus(tracks):
     if not ready(tracks):
         for timer in [track["timer"] for track in tracks]:
-            message = "Track {}\n{}".format(timer.track, timer.sensor_status)
+            message = "Track {}\n{}".format(timer.track, timer.status)
             if timer.ready:
                 print(message)
             else:
                 print(message, file=stderr)
+
+            # print seperator
             print("{:=<30}".format(""))
         exit(0)
 

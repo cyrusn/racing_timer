@@ -57,16 +57,16 @@ class TrackSensor:
             self.finish_sensor.when_dark = value
 
     @property
-    def status_message(self):
-        start_sensor_message = "{:<15}{start:>15}".format(
+    def status(self):
+        start_status = "{:<15}{start:>15}".format(
             "Start:", start="OK" if self.start_ready else "Fail"
         )
 
-        finish_sensor_message = "\n{:<15}{finish:>15}".format(
+        finish_status = "\n{:<15}{finish:>15}".format(
             "Finish:", finish="OK" if self.finish_ready else "Fail"
         )
 
-        return start_sensor_message + finish_sensor_message
+        return start_status + finish_status
 
 
 if __name__ == "__main__":
@@ -83,7 +83,7 @@ if __name__ == "__main__":
 
     sensor = TrackSensor(start_pin, finish_pin)
 
-    message = sensor.status_message
+    message = sensor.status
     print(message)
 
     sensor.when_start = startMessage
